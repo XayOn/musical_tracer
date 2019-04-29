@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "musical_tracer"
+version = "0.1.3"
+description = ""
+authors = ["David Francos <opensource@davidfrancos.net>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+stringcase = "^1.2"
+docopt = "^0.6.2"
+async-timeout = "^3.0"
+parse = "^1.12"
+cleo = "^0.7.2"
+pygogo = "^0.12.0"
+ast2json = "^0.2.1"
+pytheory = "^0.1.2"
+
+[tool.poetry.dev-dependencies]
+pytest-flake8 = "^1.0"
+pycodestyle = "^2.5"
+pytest-cov = "^2.6"
+asynctest = "^0.12.3"
+pydocstyle = "^3.0"
+sphinx = "^2.0"
+
+[tool.poetry.scripts]
+musical_tracer = 'musical_tracer:main'
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
