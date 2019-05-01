@@ -1,12 +1,13 @@
 """Main app."""
 
 from contextlib import suppress
+from itertools import count
 import configparser
 import logging
 import asyncio
 import json
 
-from .music import play_from
+from .music import Player
 
 from cleo import Command
 from cleo import Application
@@ -42,13 +43,24 @@ class MusicalTracerServerCommand(Command):
 
 
 async def main_server(logger, config, socket):
+    """Execute player for each line received."""
+
     async def client_connected(reader, writer):
-        while True:
-            with suppress(Exception):
+        """Client connected callback."""
+        player = Player()
+        player.reset(config=config, logger=logger)
+        for event in count(0):
+            try:
                 result = (await reader.readline()).decode()
-                play_from(json.loads(result))
+                player.add_note({**json.loads(result), **dict(eventno=event)})
+                player.run()
+            except json.JSONDecodeError:
+                pass
+            except:
+                logger.get_logger().exception('cant_load')
 
     await asyncio.start_unix_server(client_connected, socket)
+
     while True:
         await asyncio.sleep(1)
 

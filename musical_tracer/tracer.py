@@ -2,11 +2,15 @@ from collections import defaultdict
 from contextlib import contextmanager
 from contextlib import suppress
 from datetime import datetime
+from pathlib import Path
+import ast
 import functools
 import inspect
 import pathlib
+import socket
 import sys
-import ast
+
+from .writer import write as default_writer
 
 CACHES = {'files': {}, 'modules': {}}
 
@@ -21,7 +25,12 @@ class Tracer:
     Implement tracing logic, calls write function with a result dict
     """
 
-    def __init__(self, target, write, max_depth=1):
+    def __init__(self, target, write=None, max_depth=1):
+        if isinstance(write, pathlib.Path):
+            # If a path is specified, we'll use it as a unix socket path
+            client = socket.socket(socket.AF_UNIX)
+            client.connect(str(write.absolute()))
+            write = functools.partial(default_writer, socket=client)
         self.write = write
         self.target = target
         self.max_depth = max_depth
@@ -85,7 +94,6 @@ class Tracer:
         result['time'] = datetime.utcnow()
         result['event'] = event
         try:
-            print(self.get_ast(frame_source))
             find_in_tree(self.get_ast(frame_source), result['line_number'])
         except Found as err:
             result['ast_tree'] = err.elem
@@ -119,7 +127,7 @@ class Tracer:
 
 
 @contextmanager
-def tracer(target, write, max_depth):
+def tracer(target, write=None, max_depth=1):
     """Trace and cleanup sys tracer."""
     _trace = sys.gettrace()
     sys.settrace(Tracer(target, write, max_depth).trace)
