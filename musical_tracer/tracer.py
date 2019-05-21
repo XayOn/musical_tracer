@@ -43,8 +43,8 @@ class Tracer:
             module = frame.f_globals['__name__']
             source = CACHES['modules'].get(
                 module,
-                frame.f_globals.get('__loader__').get_source(module).
-                splitlines())
+                frame.f_globals.get('__loader__').get_source(
+                    module).splitlines())
             CACHES['modules'][module] = source
             return source
 
@@ -52,7 +52,7 @@ class Tracer:
             file_src = frame.f_code.co_filename
             source = CACHES['files'].get(
                 file_src,
-                pathlib.Path(file_source).read_text().splitlines())
+                pathlib.Path(file_src).read_text().splitlines())
             CACHES['files'][file_src] = source
             return source
 
