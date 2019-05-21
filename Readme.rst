@@ -7,16 +7,17 @@ Musical tracing program
 .. image:: ./score.png?raw=True
 
 Have you ever tried debugging *with music*?
-This is a simple tracer with musical capabilities.
+
+**Musical Tracer** is a simple tracer with musical capabilities.
+
+It combines an expert system for musical generation with a tracer that will
+dinamically analise your code, as opposed as my previous attempt
+`Musical Coding <https://github.com/XayOn/musical_coding>`_
+that did a static analysis of the code.
 
 Inspired by `Pysnooper <https://github.com/cool-RR/PySnooper/>`_ and
 `pytheory <https://github.com/kennethreitz/pytheory/>`_,
 with `Pyknow powers <https://github.com/buguroo/pyknow/>`_.
-
-This combines an expert system for musical generation with a tracer that will
-dinamically analise your code, as opposed as my previous attempt
-`Musical Coding <https://github.com/XayOn/musical_coding>`_
-that did a static analysis of the code.
 
 How to make it work
 -------------------
